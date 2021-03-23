@@ -1,19 +1,23 @@
-
-def  _give_me_a_good_name(value, nextValue, maxDelta):
-  if nextValue - value > maxDelta:
+def within_safe_range(value, nextValue, maxDelta): 
+  if nextValue - value > maxDelta:                                      
     return False
   return True
 
 def validate_soc_reading(values):
-  last_but_one_reading = len(values) - 1
-  for i in range(last_but_one_reading):
-    if(not _give_me_a_good_name(values[i], values[i + 1], 0.05)):
-      return False
-  return True
+    return process_sensor_reading(values,maxDelta = 0.05)
 
 def validate_current_reading(values):
-  last_but_one_reading = len(values) - 1
-  for i in range(last_but_one_reading):
-    if(not _give_me_a_good_name(values[i], values[i + 1], 0.1)):
-      return False
-  return True
+    return process_sensor_reading(values,maxDelta = 0.1) 
+
+def validate_reading(values,maxDelta):                                    
+    last_but_one_reading = len(values) - 1                                  
+    for i in range(last_but_one_reading):                                   
+        if(not within_safe_range(values[i], values[i + 1], maxDelta)):
+            return False                                                         
+    return True
+
+def process_sensor_reading(values,maxDelta):
+    if values is not None:
+        return validate_reading(values,maxDelta)
+    else:
+        return False
